@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import SignOutButton from './SignOutButton';
+import SignOutButton from './SignOutButton'; // Assuming this component exists
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,31 +28,39 @@ export default function Navbar() {
 
   // Tailwind styling for a clean, dark, and modern navbar
   return (
-    <nav className="bg-gray-800 shadow-md">
+    // MODIFIED: Deeper dark background and shadow for modern contrast
+    <nav className="bg-gray-900 shadow-xl border-b border-indigo-500/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* Logo/Home Link */}
+          {/* Logo/Home Link - Stronger, bolder style */}
           <div className="flex-shrink-0">
-            <Link href="/" className="text-white text-xl font-bold tracking-wider hover:text-indigo-400 transition duration-150">
+            <Link href="/" className="text-white text-2xl font-extrabold tracking-widest uppercase hover:text-indigo-400 transition duration-200">
               AuthApp
             </Link>
           </div>
           
           {/* Navigation Links */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             {isLoggedIn ? (
               <>
                 {/* Links for Logged-In User */}
-                <Link href="/dashboard" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">
+                <Link 
+                  href="/dashboard" 
+                  className="text-gray-200 hover:bg-gray-700 hover:text-indigo-400 px-3 py-2 rounded-lg text-base font-semibold transition duration-200"
+                >
                   Dashboard
                 </Link>
+                {/* SignOutButton component will handle the styling for the button */}
                 <SignOutButton />
               </>
             ) : (
               <>
-                {/* Links for Logged-Out User */}
-                <Link href="/login" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">
+                {/* Links for Logged-Out User - Accentuated Sign In/Register Button */}
+                <Link 
+                  href="/login" 
+                  className="bg-indigo-600 text-white font-bold px-4 py-2 rounded-lg text-sm shadow-lg hover:bg-indigo-500 transition duration-200 transform hover:scale-105"
+                >
                   Sign In / Register
                 </Link>
               </>
