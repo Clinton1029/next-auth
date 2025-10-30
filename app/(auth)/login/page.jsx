@@ -7,14 +7,14 @@ import { FaGithub } from "react-icons/fa";
 
 export default function LoginPage() {
   return (
-    <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 px-6">
+    <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 px-6">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-md p-8 rounded-2xl backdrop-blur-xl bg-white/10 border border-white/10 shadow-2xl"
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="w-full max-w-md p-10 rounded-3xl backdrop-blur-2xl bg-white/5 border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
       >
-        <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent tracking-tight">
           Welcome Back 👋
         </h1>
 
@@ -23,48 +23,42 @@ export default function LoginPage() {
           <input
             type="email"
             placeholder="Email"
-            className="p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
           />
           <input
             type="password"
             placeholder="Password"
-            className="p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
           />
 
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold hover:opacity-90 transition"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(147,51,234,0.5)] transition-transform duration-200"
           >
             Login
           </button>
         </form>
 
         {/* Divider */}
-        <div className="flex items-center justify-center my-6">
-          <div className="border-t border-gray-600 w-1/4"></div>
-          <span className="text-gray-400 text-sm mx-3">or</span>
-          <div className="border-t border-gray-600 w-1/4"></div>
+        <div className="flex items-center justify-center my-8">
+          <div className="border-t border-gray-700 w-1/4"></div>
+          <span className="text-gray-500 text-sm mx-3">or</span>
+          <div className="border-t border-gray-700 w-1/4"></div>
         </div>
 
-        {/* OAuth Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-white text-gray-800 font-semibold hover:bg-gray-100 transition"
-          >
-            <FcGoogle size={22} />
-            <span>Continue with Google</span>
+        {/* OAuth Icon Buttons */}
+        <div className="flex justify-center gap-6">
+          <button className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition hover:scale-105">
+            <FcGoogle size={28} />
           </button>
 
-          <button
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-[#24292F] text-white font-semibold hover:bg-[#333] transition"
-          >
-            <FaGithub size={22} />
-            <span>Continue with GitHub</span>
+          <button className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition hover:scale-105">
+            <FaGithub size={26} className="text-white" />
           </button>
         </div>
 
         {/* Register link */}
-        <p className="text-center text-gray-400 mt-6">
+        <p className="text-center text-gray-400 mt-8">
           Don’t have an account?{" "}
           <Link href="/register" className="text-purple-400 hover:underline">
             Register
