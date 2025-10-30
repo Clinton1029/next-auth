@@ -1,73 +1,45 @@
-// components/Navbar.jsx
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import SignOutButton from './SignOutButton'; // Assuming this component exists
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // Check the mock session state on the client
-  useEffect(() => {
-    // This runs on the client after mounting
-    const checkAuthStatus = () => {
-      if (typeof window !== 'undefined') {
-        setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
-      }
-    };
-
-    checkAuthStatus();
-
-    // Listen for storage changes (e.g., login/logout from another tab)
-    window.addEventListener('storage', checkAuthStatus);
-    return () => {
-      window.removeEventListener('storage', checkAuthStatus);
-    };
-  }, []);
-
-  // Tailwind styling for a clean, dark, and modern navbar
   return (
-    // MODIFIED: Deeper dark background and shadow for modern contrast
-    <nav className="bg-gray-900 shadow-xl border-b border-indigo-500/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          
-          {/* Logo/Home Link - Stronger, bolder style */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-white text-2xl font-extrabold tracking-widest uppercase hover:text-indigo-400 transition duration-200">
-              AuthApp
-            </Link>
-          </div>
-          
-          {/* Navigation Links */}
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            {isLoggedIn ? (
-              <>
-                {/* Links for Logged-In User */}
-                <Link 
-                  href="/dashboard" 
-                  className="text-gray-200 hover:bg-gray-700 hover:text-indigo-400 px-3 py-2 rounded-lg text-base font-semibold transition duration-200"
-                >
-                  Dashboard
-                </Link>
-                {/* SignOutButton component will handle the styling for the button */}
-                <SignOutButton />
-              </>
-            ) : (
-              <>
-                {/* Links for Logged-Out User - Accentuated Sign In/Register Button */}
-                <Link 
-                  href="/login" 
-                  className="bg-indigo-600 text-white font-bold px-4 py-2 rounded-lg text-sm shadow-lg hover:bg-indigo-500 transition duration-200 transform hover:scale-105"
-                >
-                  Sign In / Register
-                </Link>
-              </>
-            )}
-          </div>
+    <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/10 border-b border-white/10">
+      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <Link href="/" className="text-2xl font-bold tracking-tight">
+          NextAuth<span className="text-blue-400">App</span>
+        </Link>
+
+        <div className="hidden md:flex gap-6">
+          <Link href="/(auth)/login" className="hover:text-blue-400">Login</Link>
+          <Link href="/(auth)/register" className="bg-blue-500 px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+            Register
+          </Link>
         </div>
+
+        <button className="md:hidden" onClick={() => setOpen(!open)}>
+          {open ? <X /> : <Menu />}
+        </button>
       </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden bg-black/80 text-center py-6"
+          >
+            <Link href="/(auth)/login" className="block py-2">Login</Link>
+            <Link href="/(auth)/register" className="block py-2 text-blue-400">Register</Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
