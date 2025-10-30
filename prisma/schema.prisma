@@ -55,16 +55,14 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  
-  // 🔑 CUSTOM FIELD: Required for Credentials Provider (Email/Password)
-  // This will store the bcrypt hash of the user's password.
-  passwordHash  String?   
 
+  password      String?   // ✅ renamed
   accounts      Account[]
   sessions      Session[]
 
-  @@map("users") // Optional: Use snake_case in the database
+  @@map("users")
 }
+
 
 model VerificationToken {
   identifier String
