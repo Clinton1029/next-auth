@@ -2,84 +2,59 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  async function handleRegister(e) {
-    e.preventDefault();
-    setLoading(true);
-
-    // 👉 Will connect to backend route later
-    console.log("Registering:", { name, email, password });
-    setTimeout(() => setLoading(false), 1500);
-  }
-
   return (
-    <section className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 px-6">
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-lg w-full max-w-md border border-white/20"
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md p-8 rounded-2xl backdrop-blur-xl bg-white/10 border border-white/10 shadow-2xl"
       >
-        <h2 className="text-3xl font-bold text-center mb-8">
+        <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
           Create an Account 🚀
-        </h2>
+        </h1>
 
-        <form onSubmit={handleRegister} className="flex flex-col space-y-4">
+        {/* Form */}
+        <form className="flex flex-col space-y-5">
           <input
             type="text"
             placeholder="Full Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="p-3 rounded-lg bg-white/5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <input
             type="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="p-3 rounded-lg bg-white/5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <input
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="p-3 rounded-lg bg-white/5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <button
             type="submit"
-            disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold flex justify-center"
+            className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold hover:opacity-90 transition"
           >
-            {loading ? <Loader2 className="animate-spin" /> : "Register"}
+            Register
           </button>
         </form>
 
-        <div className="text-center text-sm mt-6">
-          <p className="text-gray-400">
-            Already have an account?{" "}
-            <Link href="/(auth)/login" className="text-blue-400 hover:underline">
-              Login
-            </Link>
-          </p>
-        </div>
+        {/* Google Button (for OAuth later) */}
+        <button
+          className="w-full mt-4 py-3 rounded-lg bg-white/20 text-white font-semibold hover:bg-white/30 transition"
+        >
+          Continue with Google
+        </button>
 
-        <div className="mt-8 flex flex-col items-center">
-          <button className="border border-white/20 px-4 py-2 rounded-lg hover:bg-white/10 transition">
-            Continue with Google
-          </button>
-        </div>
+        <p className="text-center text-gray-400 mt-6">
+          Already have an account?{" "}
+          <Link href="/login" className="text-purple-400 hover:underline">
+            Login
+          </Link>
+        </p>
       </motion.div>
     </section>
   );
