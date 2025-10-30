@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 export default function RegisterPage() {
   return (
@@ -16,7 +18,7 @@ export default function RegisterPage() {
           Create an Account 🚀
         </h1>
 
-        {/* Form */}
+        {/* Register Form */}
         <form className="flex flex-col space-y-5">
           <input
             type="text"
@@ -42,13 +44,31 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        {/* Google Button (for OAuth later) */}
-        <button
-          className="w-full mt-4 py-3 rounded-lg bg-white/20 text-white font-semibold hover:bg-white/30 transition"
-        >
-          Continue with Google
-        </button>
+        {/* Divider */}
+        <div className="flex items-center justify-center my-6">
+          <div className="border-t border-gray-600 w-1/4"></div>
+          <span className="text-gray-400 text-sm mx-3">or</span>
+          <div className="border-t border-gray-600 w-1/4"></div>
+        </div>
 
+        {/* OAuth Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-white text-gray-800 font-semibold hover:bg-gray-100 transition"
+          >
+            <FcGoogle size={22} />
+            <span>Continue with Google</span>
+          </button>
+
+          <button
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-[#24292F] text-white font-semibold hover:bg-[#333] transition"
+          >
+            <FaGithub size={22} />
+            <span>Continue with GitHub</span>
+          </button>
+        </div>
+
+        {/* Login Link */}
         <p className="text-center text-gray-400 mt-6">
           Already have an account?{" "}
           <Link href="/login" className="text-purple-400 hover:underline">
