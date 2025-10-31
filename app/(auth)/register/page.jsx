@@ -1,11 +1,53 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMsg(data.error || "Registration failed");
+      } else {
+        setSuccessMsg("✅ Account created! Redirecting...");
+        setTimeout(() => {
+          window.location.href = "/login"; // redirect after success
+        }, 1500);
+      }
+    } catch (error) {
+      setErrorMsg("Something went wrong.");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 px-4">
       <motion.div
@@ -18,31 +60,47 @@ export default function RegisterPage() {
           Create Account 🚀
         </h1>
 
-        <form className="flex flex-col space-y-4">
+        {errorMsg && (
+          <p className="text-red-400 text-center mb-3">{errorMsg}</p>
+        )}
+        {successMsg && (
+          <p className="text-green-400 text-center mb-3">{successMsg}</p>
+        )}
+
+        <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Full Name"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
             className="p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
           />
+
           <input
             type="email"
             placeholder="Email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
             className="p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
           />
+
           <input
             type="password"
             placeholder="Password"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
             className="p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
           />
+
           <button
             type="submit"
+            disabled={loading}
             className="py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:opacity-90 hover:scale-[1.02] transition-all duration-200"
           >
-            Register
+            {loading ? "Creating Account..." : "Register"}
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center justify-center my-6">
           <div className="border-t border-gray-700 w-1/4" />
           <span className="text-gray-500 text-sm mx-2">or</span>
@@ -51,10 +109,17 @@ export default function RegisterPage() {
 
         {/* OAuth Buttons */}
         <div className="flex justify-center gap-5">
-          <button className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:scale-110 transition">
+          <button
+            onClick={() => signIn("google")}
+            className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:scale-110 transition"
+          >
             <FcGoogle size={24} />
           </button>
-          <button className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:scale-110 transition">
+
+          <button
+            onClick={() => signIn("github")}
+            className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:scale-110 transition"
+          >
             <FaGithub size={22} className="text-white" />
           </button>
         </div>
