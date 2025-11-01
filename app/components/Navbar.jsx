@@ -10,8 +10,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
+  // Scroll animation
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
@@ -30,6 +31,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        
         {/* Logo */}
         <Link
           href="/"
@@ -38,15 +40,31 @@ export default function Navbar() {
           ModernAuth
         </Link>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex space-x-6 items-center text-gray-300">
-
-          <Link href="/" className="hover:text-white transition">
+        {/* Desktop Menu */}
+        <div className="hidden md:flex space-x-6 items-center">
+          <Link href="/" className="text-gray-300 hover:text-white transition">
             Home
           </Link>
 
-          {/* ✅ SHOW ONLY IF USER IS LOGGED OUT */}
-          {!session && (
+          {session ? (
+            <>
+              {/* Profile */}
+              <Link
+                href="/dashboard"
+                className="text-gray-300 hover:text-white transition"
+              >
+                {session.user?.name || "Profile"}
+              </Link>
+
+              {/* Logout */}
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
             <>
               <Link
                 href="/login"
@@ -54,32 +72,12 @@ export default function Navbar() {
               >
                 Login
               </Link>
-
               <Link
                 href="/register"
                 className="px-4 py-2 rounded-lg border border-purple-400 text-purple-300 font-semibold hover:bg-purple-500/10 transition"
               >
                 Register
               </Link>
-            </>
-          )}
-
-          {/* ✅ SHOW ONLY IF USER IS LOGGED IN */}
-          {session && (
-            <>
-              <Link
-                href="/profile"
-                className="hover:text-white transition font-semibold"
-              >
-                {session.user?.name || "Profile"}
-              </Link>
-
-              <button
-                onClick={() => signOut()}
-                className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition"
-              >
-                Logout
-              </button>
             </>
           )}
         </div>
@@ -101,43 +99,21 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden flex flex-col items-center space-y-4 pb-6 bg-black/60 backdrop-blur-lg text-gray-300"
+            className="md:hidden flex flex-col items-center space-y-4 pb-6 bg-black/60 backdrop-blur-lg"
           >
             <Link
               href="/"
-              className="hover:text-white transition"
+              className="text-gray-300 hover:text-white transition"
               onClick={() => setIsOpen(false)}
             >
               Home
             </Link>
 
-            {/* ✅ MOBILE LOGGED OUT */}
-            {!session && (
+            {session ? (
               <>
                 <Link
-                  href="/login"
-                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold hover:opacity-90 transition"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Login
-                </Link>
-
-                <Link
-                  href="/register"
-                  className="px-4 py-2 rounded-lg border border-purple-400 text-purple-300 font-semibold hover:bg-purple-500/10 transition"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Register
-                </Link>
-              </>
-            )}
-
-            {/* ✅ MOBILE LOGGED IN */}
-            {session && (
-              <>
-                <Link
-                  href="/profile"
-                  className="hover:text-white transition"
+                  href="/dashboard"
+                  className="text-gray-300 hover:text-white transition"
                   onClick={() => setIsOpen(false)}
                 >
                   {session.user?.name || "Profile"}
@@ -146,12 +122,29 @@ export default function Navbar() {
                 <button
                   onClick={() => {
                     setIsOpen(false);
-                    signOut();
+                    signOut({ callbackUrl: "/" });
                   }}
                   className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition"
                 >
                   Logout
                 </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold hover:opacity-90 transition"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-4 py-2 rounded-lg border border-purple-400 text-purple-300 font-semibold hover:bg-purple-500/10 transition"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Register
+                </Link>
               </>
             )}
           </motion.div>
