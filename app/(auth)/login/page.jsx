@@ -1,11 +1,40 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (res?.error) {
+      setErrorMsg("Invalid email or password");
+      setLoading(false);
+      return;
+    }
+
+    router.push("/dashboard"); // ✅ redirect location
+  };
+
   return (
     <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 px-4">
       <motion.div
@@ -18,22 +47,35 @@ export default function LoginPage() {
           Welcome Back 👋
         </h1>
 
-        <form className="flex flex-col space-y-4">
+        {errorMsg && (
+          <p className="text-red-400 text-center mb-3">{errorMsg}</p>
+        )}
+
+        <form className="flex flex-col space-y-4" onSubmit={handleLogin}>
           <input
             type="email"
             placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            required
           />
+
           <input
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            required
           />
+
           <button
             type="submit"
+            disabled={loading}
             className="py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:opacity-90 hover:scale-[1.02] transition-all duration-200"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
@@ -46,10 +88,17 @@ export default function LoginPage() {
 
         {/* OAuth Buttons */}
         <div className="flex justify-center gap-5">
-          <button className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:scale-110 transition">
+          <button
+            onClick={() => signIn("google")}
+            className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:scale-110 transition"
+          >
             <FcGoogle size={24} />
           </button>
-          <button className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:scale-110 transition">
+
+          <button
+            onClick={() => signIn("github")}
+            className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:scale-110 transition"
+          >
             <FaGithub size={22} className="text-white" />
           </button>
         </div>
