@@ -36,29 +36,76 @@ export async function POST(req) {
       },
     });
 
-    // ✅ EMAIL SETUP (No extra files)
+    // ✅ EMAIL SETUP
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER, // ✅ your gmail
-        pass: process.env.EMAIL_PASS, // ✅ your app password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
-    // ✅ Send Welcome Email
+    // ✅ BEAUTIFUL HTML EMAIL TEMPLATE
+    const htmlTemplate = `
+      <div style="background: #f7f7f7; padding: 40px; font-family: Arial, sans-serif;">
+        <div style="
+          max-width: 500px;
+          margin: auto;
+          background: white;
+          padding: 30px;
+          border-radius: 12px;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        ">
+          <h2 style="text-align: center; color: #4f46e5; margin-bottom: 20px;">
+            👋 Welcome, ${name}!
+          </h2>
+
+          <p style="font-size: 16px; color: #444;">
+            Your account has been <strong>successfully created</strong>.
+          </p>
+
+          <p style="font-size: 16px; color: #444;">
+            We're excited to have you on board. You can now log in and start exploring our platform.
+          </p>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="https://yourwebsite.com/login" 
+              style="
+                background: #4f46e5;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 16px;
+              ">
+              Login Now
+            </a>
+          </div>
+
+          <p style="font-size: 14px; color: #666; margin-top: 20px;">
+            If you did not create this account, please ignore this email.
+          </p>
+
+          <hr style="margin-top: 25px; border: none; border-top: 1px solid #eee;" />
+
+          <p style="text-align: center; font-size: 13px; color: #888;">
+            © ${new Date().getFullYear()} Mtawa Auth. All rights reserved.
+          </p>
+        </div>
+      </div>
+    `;
+
+    // ✅ Send the Email
     await transporter.sendMail({
       from: `"Mtawa Auth" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "Welcome to Mtawa Auth 🚀",
-      html: `
-        <h2>Hello ${name},</h2>
-        <p>Your account was created successfully.</p>
-        <p>Welcome to the system! ✅</p>
-      `,
+      subject: "🎉 Welcome to Mtawa Auth!",
+      html: htmlTemplate,
     });
 
     return NextResponse.json(
-      { message: "User registered & email sent ✅", user: newUser },
+      { message: "User registered & beautiful email sent ✅", user: newUser },
       { status: 201 }
     );
 
