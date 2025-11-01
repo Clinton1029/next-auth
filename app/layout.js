@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import Provider from "./providers/SessionProvider";
 
 export const metadata = {
   title: "NextAuth Modern App",
@@ -10,8 +11,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        <main className="pt-20">{children}</main>
+        <Provider>
+          <Navbar />
+          <main className="pt-20">{children}</main>
+        </Provider>
       </body>
     </html>
   );
