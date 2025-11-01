@@ -36,7 +36,7 @@ export async function POST(req) {
       },
     });
 
-    // ✅ EMAIL SETUP
+    // ✅ Email Transporter (Gmail)
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -45,7 +45,7 @@ export async function POST(req) {
       },
     });
 
-    // ✅ BEAUTIFUL HTML EMAIL TEMPLATE
+    // ✅ Beautiful HTML Template + Dashboard Link
     const htmlTemplate = `
       <div style="background: #f7f7f7; padding: 40px; font-family: Arial, sans-serif;">
         <div style="
@@ -65,11 +65,11 @@ export async function POST(req) {
           </p>
 
           <p style="font-size: 16px; color: #444;">
-            We're excited to have you on board. You can now log in and start exploring our platform.
+            You can now log in and access your dashboard.
           </p>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://yourwebsite.com/login" 
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard"
               style="
                 background: #4f46e5;
                 color: white;
@@ -79,12 +79,12 @@ export async function POST(req) {
                 font-weight: bold;
                 font-size: 16px;
               ">
-              Login Now
+              Go to Dashboard
             </a>
           </div>
 
           <p style="font-size: 14px; color: #666; margin-top: 20px;">
-            If you did not create this account, please ignore this email.
+            If you did not create this account, you can safely ignore this email.
           </p>
 
           <hr style="margin-top: 25px; border: none; border-top: 1px solid #eee;" />
@@ -105,7 +105,7 @@ export async function POST(req) {
     });
 
     return NextResponse.json(
-      { message: "User registered & beautiful email sent ✅", user: newUser },
+      { message: "User registered & welcome email sent ✅", user: newUser },
       { status: 201 }
     );
 
